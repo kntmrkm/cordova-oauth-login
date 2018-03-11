@@ -19,7 +19,7 @@
     "facebook",
     "facebook-sdk",
     "line",
-    "line-sdk",
+    "line-sdk"
   ],
   "license": "Apache-2.0"
 }
