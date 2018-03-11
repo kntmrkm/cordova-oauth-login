@@ -8,7 +8,7 @@
   <js-module src="www/facebook-native.js" name="FacebookConnectPlugin">
     <clobbers target="facebookConnectPlugin" />
   </js-module>
-  <js-module src="www/lineLogin.js">
+  <js-module src="www/lineLogin.js" name="LineLogin">
     <clobbers target="lineLogin" />
   </js-module>
 
@@ -16,13 +16,6 @@
   <preference name="FB_APP_NAME" />
   <preference name="LINE_CHANNEL_ID" />
   <preference name="PRODUCT_BUNDLE_IDENTIFIER" />
-
-  <engines>
-    <!-- Requires > 3.5.0 because of the custom Framework tag for iOS [CB-6698] -->
-    <!-- Requires > 4.0.0 because of the Framework tag for Android that uses gradle -->
-    <engine name="cordova-android" version=">=7.1.0" />
-    <engine name="cordova-ios" version=">=4.5.4" />
-  </engines>
 
   <!-- android -->
   <platform name="android">
@@ -65,7 +58,6 @@
     <!-- cordova plugin src files -->
     <source-file src="src/android/ConnectPlugin.java" target-dir="src/org/apache/cordova/facebook" />
     <source-file src="src/android/LineLogin.java" target-dir="src/plugin/line" />
-
   </platform>
 
   <!-- ios -->
@@ -90,17 +82,9 @@
     <config-file target="*-Info.plist" parent="FacebookAppID">
         <string>$FB_APP_ID</string>
     </config-file>
-
     <config-file target="*-Info.plist" parent="FacebookDisplayName">
         <string>$FB_APP_NAME</string>
     </config-file>
-    <config-file target="*-Info.plist" parent="LineSDKConfig">
-      <dict>
-        <key>ChannelID</key>
-        <string>$LINE_CHANNEL_ID</string>
-      </dict>
-    </config-file>
-
     <config-file target="*-Info.plist" parent="CFBundleURLTypes">
       <array>
         <dict>
@@ -115,13 +99,6 @@
             <string>line3rdp.$PRODUCT_BUNDLE_IDENTIFIER</string>
           </array>
         </dict>
-      </array>
-    </config-file>
-
-    <config-file target="*-Info.plist" parent="LSApplicationQueriesSchemes">
-      <array>
-        <string>lineauth</string>
-        <string>line3rdp.$PRODUCT_BUNDLE_IDENTIFIER</string>
       </array>
     </config-file>
 
@@ -154,7 +131,18 @@
       </dict>
     </config-file>
 
+    <config-file target="*-Info.plist" parent="LineSDKConfig">
+      <dict>
+        <key>ChannelID</key>
+        <string>$LINE_CHANNEL_ID</string>
+      </dict>
+    </config-file>
+
     <config-file target="*-Info.plist" parent="LSApplicationQueriesSchemes">
+      <array>
+        <string>lineauth</string>
+        <string>line3rdp.$PRODUCT_BUNDLE_IDENTIFIER</string>
+      </array>
       <array>
         <string>fbapi</string>
         <string>fb-messenger-api</string>
