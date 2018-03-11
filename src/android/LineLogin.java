@@ -47,7 +47,9 @@ public class LineLogin extends CordovaPlugin {
             try {
                 json.put("userID", profile.getUserId());
                 json.put("displayName", profile.getDisplayName());
+                json.put("accessToken", profile.getAccessToken());
                 json.put("pictureURL", profile.getPictureUrl());
+                json.put("statusMessage", profile.getStatusMessage());
                 callbackContext.success(json);
             } catch (JSONException e) {
                 callbackContext.error(-1);

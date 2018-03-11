@@ -21,16 +21,16 @@ import LineSDK
                 return
             }
             
-            var data = ["userid" : profile.userID,
-                        "displayname" : profile.displayName,
-                        "accesstoken" : accessToken.accessToken]
+            var data = ["userID" : profile.userID,
+                        "displayName" : profile.displayName,
+                        "accessToken" : accessToken.accessToken]
             
             if let pictureURL = profile.pictureURL {
-                data["pictureurl"] = pictureURL.absoluteString
+                data["pictureURL"] = pictureURL.absoluteString
             }
             
             if let statusMessage = profile.statusMessage {
-                data["statusmessage"] = statusMessage
+                data["statusMessage"] = statusMessage
             }
             
             let result = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: data)
