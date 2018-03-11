@@ -1,0 +1,25 @@
+{
+  "name": "cordova-oauth-login",
+  "version": "1.0.0",
+  "description": "Cordova Oauth Login",
+  "cordova": {
+    "id": "cordova-oauth-login",
+    "platforms": [
+      "android",
+      "ios"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kntmrkm/cordova-oauth-login"
+  },
+  "keywords": [
+    "cordova",
+    "social",
+    "facebook",
+    "facebook-sdk",
+    "line",
+    "line-sdk",
+  ],
+  "license": "Apache-2.0"
+}
