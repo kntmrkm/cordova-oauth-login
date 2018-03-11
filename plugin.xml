@@ -151,10 +151,10 @@
       </array>
     </config-file>
 
+    <header-file src="src/ios/AppDelegate+OauthLogin.h" />
+    <source-file src="src/ios/AppDelegate+OauthLogin.m" />
     <header-file src="src/ios/FacebookConnectPlugin.h" />
     <source-file src="src/ios/FacebookConnectPlugin.m" />
-    <header-file src="src/ios/AppDelegate+LineLogin.h" />
-    <source-file src="src/ios/AppDelegate+LineLogin.m" />
     <source-file src="src/ios/LineLogin.swift" />
 
     <!-- Bolts framework -->
