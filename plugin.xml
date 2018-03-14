@@ -158,8 +158,12 @@
     <framework src="src/ios/Bolts.framework" custom="true" />
 
     <!-- Facebook framework -->
+    <framework src="src/ios/AccountKit.framework" custom="true" />
+    <framework src="src/ios/FBNotifications.framework" custom="true" />
     <framework src="src/ios/FBSDKCoreKit.framework" custom="true" />
     <framework src="src/ios/FBSDKLoginKit.framework" custom="true" />
+    <framework src="src/ios/FBSDKMessengerShareKit.framework" custom="true" />
+    <framework src="src/ios/FBSDKPlacesKit.framework" custom="true" />
     <framework src="src/ios/FBSDKShareKit.framework" custom="true" />
 
     <framework src="src/ios/LineSDK.framework" custom="true" />

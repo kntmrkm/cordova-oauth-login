@@ -208,8 +208,8 @@
     if ([command.arguments count] > 0) {
         permissions = command.arguments;
     }
-    
-    NSSet *grantedPermissions = [FBSDKAccessToken currentAccessToken].permissions; 
+
+    NSSet *grantedPermissions = [FBSDKAccessToken currentAccessToken].permissions;
 
     for (NSString *value in permissions) {
     	NSLog(@"Checking permission %@.", value);
@@ -220,7 +220,7 @@
             return;
         }
     }
-    
+
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
     												 messageAsString:@"All permissions have been accepted"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -243,6 +243,7 @@
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
+/*
 - (void) showDialog:(CDVInvokedUrlCommand*)command
 {
     if ([command.arguments count] == 0) {
@@ -395,6 +396,7 @@
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"method not supported"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
+*/
 
 - (void) graphApi:(CDVInvokedUrlCommand *)command
 {
