@@ -212,17 +212,17 @@
     NSSet *grantedPermissions = [FBSDKAccessToken currentAccessToken].permissions; 
 
     for (NSString *value in permissions) {
-    	NSLog(@"Checking permission %@.", value);
+        NSLog(@"Checking permission %@.", value);
         if (![grantedPermissions containsObject:value]) { //checks if permissions does not exists
             CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
-            												 messageAsString:@"A permission has been denied"];
+                                                             messageAsString:@"A permission has been denied"];
             [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
             return;
         }
     }
     
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
-    												 messageAsString:@"All permissions have been accepted"];
+                                                     messageAsString:@"All permissions have been accepted"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     return;
 }
@@ -291,13 +291,13 @@
         dialog.delegate = self;
         // Adopt native share sheets with the following line
         if (params[@"share_sheet"]) {
-        	dialog.mode = FBSDKShareDialogModeShareSheet;
+            dialog.mode = FBSDKShareDialogModeShareSheet;
         } else if (params[@"share_feedBrowser"]) {
-        	dialog.mode = FBSDKShareDialogModeFeedBrowser;
+            dialog.mode = FBSDKShareDialogModeFeedBrowser;
         } else if (params[@"share_native"]) {
-        	dialog.mode = FBSDKShareDialogModeNative;
+            dialog.mode = FBSDKShareDialogModeNative;
         } else if (params[@"share_feedWeb"]) {
-        	dialog.mode = FBSDKShareDialogModeFeedWeb;
+            dialog.mode = FBSDKShareDialogModeFeedWeb;
         }
 
         [dialog show];
@@ -735,69 +735,4 @@
     self.gameRequestDialogCallbackId = nil;
 }
 
-@end
-
-
-#pragma mark - AppDelegate Overrides
-
-@implementation AppDelegate (FacebookConnectPlugin)
-
-void FBMethodSwizzle(Class c, SEL originalSelector) {
-    NSString *selectorString = NSStringFromSelector(originalSelector);
-    SEL newSelector = NSSelectorFromString([@"swizzled_" stringByAppendingString:selectorString]);
-    SEL noopSelector = NSSelectorFromString([@"noop_" stringByAppendingString:selectorString]);
-    Method originalMethod, newMethod, noop;
-    originalMethod = class_getInstanceMethod(c, originalSelector);
-    newMethod = class_getInstanceMethod(c, newSelector);
-    noop = class_getInstanceMethod(c, noopSelector);
-    if (class_addMethod(c, originalSelector, method_getImplementation(newMethod), method_getTypeEncoding(newMethod))) {
-        class_replaceMethod(c, newSelector, method_getImplementation(originalMethod) ?: method_getImplementation(noop), method_getTypeEncoding(originalMethod));
-    } else {
-        method_exchangeImplementations(originalMethod, newMethod);
-    }
-}
-
-+ (void)load
-{
-    FBMethodSwizzle([self class], @selector(application:openURL:sourceApplication:annotation:));
-}
-
-// This method is a duplicate of the other openURL method below, except using the newer iOS (9) API.
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options {
-    if (!url) {
-        return NO;
-    }
-    // Required by FBSDKCoreKit for deep linking/to complete login
-    [[FBSDKApplicationDelegate sharedInstance] application:application openURL:url sourceApplication:[options valueForKey:@"UIApplicationOpenURLOptionsSourceApplicationKey"] annotation:0x0];
-    
-    // NOTE: Cordova will run a JavaScript method here named handleOpenURL. This functionality is deprecated
-    // but will cause you to see JavaScript errors if you do not have window.handleOpenURL defined:
-    // https://github.com/Wizcorp/phonegap-facebook-plugin/issues/703#issuecomment-63748816
-    NSLog(@"FB handle url: %@", url);
-
-    // Call existing method
-    return [self swizzled_application:application openURL:url sourceApplication:[options valueForKey:@"UIApplicationOpenURLOptionsSourceApplicationKey"] annotation:0x0];
-}
-
-- (BOOL)noop_application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
-{
-    return NO;
-}
-
-- (BOOL)swizzled_application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
-{
-    if (!url) {
-        return NO;
-    }
-    // Required by FBSDKCoreKit for deep linking/to complete login
-    [[FBSDKApplicationDelegate sharedInstance] application:application openURL:url sourceApplication:sourceApplication annotation:annotation];
-
-    // NOTE: Cordova will run a JavaScript method here named handleOpenURL. This functionality is deprecated
-    // but will cause you to see JavaScript errors if you do not have window.handleOpenURL defined:
-    // https://github.com/Wizcorp/phonegap-facebook-plugin/issues/703#issuecomment-63748816
-    NSLog(@"FB handle url: %@", url);
-    
-    // Call existing method
-    return [self swizzled_application:application openURL:url sourceApplication:sourceApplication annotation:annotation];
-}
 @end
