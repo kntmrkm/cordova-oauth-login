@@ -3,17 +3,17 @@
 ## 2018.05.14
 
 - LINE SDK
- - Android 4.0.7
- - iOS     4.1.1
+  - Android 4.0.7
+  - iOS     4.1.1
 - Facebook SDK
- - Android 4.32.0
- - iOS     4.33.0
+  - Android 4.32.0
+  - iOS     4.33.0
 
 ## initial
 
 - LINE SDK 
- - Android 4.0.7
- - iOS 
+  - Android 4.0.7
+  - iOS 
 - Facebook SDK
 
 
