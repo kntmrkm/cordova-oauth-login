@@ -29,7 +29,7 @@
       <access origin="https://api.facebook.com" />
       <access origin="https://*.fbcdn.net" />
       <access origin="https://*.akamaihd.net" />
-      <preference name="android-minSdkVersion" value="15" />
+      <preference name="android-minSdkVersion" value="19" />
       <feature name="LineLogin">
         <param name="android-package" value="plugin.line.LineLogin"/>
       </feature>
