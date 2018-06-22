@@ -17,6 +17,7 @@ import LineSDK
     
     func login(_ command: CDVInvokedUrlCommand) {
         self.callbackId = command.callbackId
+        LineSDKLogin.sharedInstance().delegate = self
         LineSDKLogin.sharedInstance().start()
     }
     
@@ -70,22 +71,25 @@ import LineSDK
     }
     
     func didLogin(_ login: LineSDKLogin, credential: LineSDKCredential?, profile: LineSDKProfile?, error: Error?) {
-        
         if error != nil {
             let result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: error.debugDescription)
             commandDelegate.send(result, callbackId:self.callbackId)
         } else {
-            var data = ["userID":nil, "displayName":nil, "pictureURL":nil] as [String : Any?]
-            if let displayName = profile?.displayName {
-                data.updateValue(displayName, forKey: "displayName")
+            guard let profile = profile, let credential = credential, let accessToken = credential.accessToken else {
+                let result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: "Invalid Repsonse")
+                commandDelegate.send(result, callbackId:self.callbackId)
+                return
             }
-            if let userID = profile?.userID {
-                data.updateValue(userID, forKey: "userID")
+            
+            var data = ["userID" : profile.userID,
+                        "displayName" : profile.displayName,
+                        "accessToken" : accessToken.accessToken]
+            
+            if let pictureURL = profile.pictureURL {
+                data["pictureURL"] = pictureURL.absoluteString
             }
-            if let pictureURL = profile?.pictureURL {
-                data.updateValue(String(describing: pictureURL), forKey: "pictureURL")
-            }
-            let result = CDVPluginResult(status: CDVCommandStatus_OK, messageAs:data)
+            
+            let result = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: data)
             commandDelegate.send(result, callbackId:self.callbackId)
         }
     }
