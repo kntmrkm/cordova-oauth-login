@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2018.08.04
+
+- Facebook SDK iOS 4.35.0
+
 ## 2018.05.14
 
 - LINE SDK
