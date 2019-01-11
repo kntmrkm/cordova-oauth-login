@@ -37,18 +37,14 @@
 
     <source-file src="src/android/facebookconnect.xml" target-dir="res/values" />
     <!-- Used for cordova-android 6 -->
-    <!-- <config-file target="res/values/facebookconnect.xml" parent="/*">
+    <config-file target="res/values/facebookconnect.xml" parent="/*">
       <string name="fb_app_id">$FB_APP_ID</string>
       <string name="fb_app_name">$FB_APP_NAME</string>
-    </config-file> -->
+    </config-file>
     <!-- Used for cordova-android 7 -->
     <config-file target="app/src/main/res/values/facebookconnect.xml" parent="/*">
       <string name="fb_app_id">$APP_ID</string>
       <string name="fb_app_name">$APP_NAME</string>
-    </config-file>
-    <config-file parent="/resources" target="./res/values/strings.xml">
-      <string name="fb_app_id">$FB_APP_ID</string>
-      <string name="fb_app_name">$FB_APP_NAME</string>
     </config-file>
 
     <config-file target="AndroidManifest.xml" parent="application">
