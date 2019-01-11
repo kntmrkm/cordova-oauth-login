@@ -24,13 +24,11 @@ typedef NS_ENUM(NSUInteger, LineSDKRequestMethod) {
     LineSDKRequestMethodPost,
     LineSDKRequestMethodDelete,
     LineSDKRequestMethodPut
-} NS_SWIFT_NAME(RequestMethod);
+};
 
 @class LineSDKAccessToken;
 
 NS_ASSUME_NONNULL_BEGIN
-
-NS_SWIFT_NAME(RequestProtocol)
 @protocol LineSDKRequestProtocol <NSObject>
 
 @property (nonatomic, assign, readonly) LineSDKRequestMethod method;
@@ -44,7 +42,6 @@ NS_SWIFT_NAME(RequestProtocol)
 
 @end
 
-NS_SWIFT_NAME(AuthenticationRefreshDelegate)
 @protocol LineSDKAuthenticationRefreshDelegate <NSObject>
 
 - (void)refreshTokenWithAccessToken:(nullable LineSDKAccessToken *)accessToken

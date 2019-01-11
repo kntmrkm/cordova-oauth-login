@@ -1,8 +1,12 @@
 # CHANGELOG
 
-## 2019.01.10 予定
+## 2019.01.10
 
-- 
+- LINE SDK
+  - Andoird 4.0.10
+  - iOS 4.1.1
+- Facebook SDK
+  - iOS 4.39.1
 
 ## 2018.08.04
 

@@ -34,18 +34,10 @@ typedef NS_ENUM(NSInteger, LineSDKInternalErrorCode) {
     LineSDKInternalErrorCodeInvalidTokenType,
     LineSDKInternalErrorCodeMissingRequiredField,
     LineSDKInternalErrorCodeInvalidValueType,
-    LineSDKInternalErrorCodeInvalidJSONWebKeyType,
-    LineSDKInternalErrorCodeTokenIDVerificationFailed,
-} NS_SWIFT_NAME(InternalErrorCode);
+};
 
-extern NSString *const LineSDKMessageErrorDomain;
 
-typedef NS_ENUM(NSInteger, LineSDKMessageError) {
-    LineSDKMessageErrorUnknown,
-    LineSDKMessageErrorDiscarded,
-} NS_SWIFT_NAME(MessageError);
-
-@interface NSError (LineSDK)
+@interface NSError(LineSDK)
 
 + (instancetype)LineSDK_socialAPIErrorWithStatusCode:(NSInteger)statusCode
                                                 data:(nullable NSDictionary *)data
@@ -56,16 +48,16 @@ typedef NS_ENUM(NSInteger, LineSDKMessageError) {
                                              underlyingError:(nullable NSError *)underlyingError;
 
 + (instancetype)LineSDK_internalErrorWithErrorCode:(enum LineSDKInternalErrorCode)errorCode
-                                       description:(NSString *)description
+                                        desciption:(NSString *)description
                                    underlyingError:(nullable NSError *)underlyingError;
 
 + (instancetype)LineSDK_internalErrorWithErrorCode:(enum LineSDKInternalErrorCode)errorCode
-                                       description:(NSString *)description;
+                                        desciption:(NSString *)description;
 
 
 + (instancetype)LineSDK_missingAccessTokenError;
 + (instancetype)LineSDK_invalidTokenTypeWithTokenType:(NSString *)tokenType;
-+ (instancetype)LineSDK_invalidJSONWebKeyError;
+
 @end
 
 NS_ASSUME_NONNULL_END
