@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2019.01.10 予定
+
+- 
+
 ## 2018.08.04
 
 - Facebook SDK iOS 4.35.0
@@ -26,3 +30,8 @@
 - https://developers.line.me/ja/docs/line-login/downloads/
 - https://developers.facebook.com/docs/ios/?locale=ja_JP
 - https://developers.facebook.com/docs/android?locale=ja_JP
+
+# 参考元
+
+- https://github.com/nrikiji/cordova-line-login-plugin
+- https://github.com/jeduan/cordova-plugin-facebook4
