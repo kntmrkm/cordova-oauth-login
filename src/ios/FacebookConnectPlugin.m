@@ -18,6 +18,7 @@
 @property (strong, nonatomic) NSString* dialogCallbackId;
 @property (strong, nonatomic) FBSDKLoginManager *loginManager;
 @property (strong, nonatomic) NSString* gameRequestDialogCallbackId;
+@property (nonatomic, assign) BOOL applicationWasActivated;
 
 - (NSDictionary *)responseObject;
 - (NSDictionary*)parseURLParams:(NSString *)query;
@@ -52,6 +53,10 @@
 
 - (void) applicationDidBecomeActive:(NSNotification *) notification {
     [FBSDKAppEvents activateApp];
+    if (self.applicationWasActivated == NO) {
+        self.applicationWasActivated = YES;
+        [self enableHybridAppEvents];
+    }
 }
 
 #pragma mark - Cordova commands
