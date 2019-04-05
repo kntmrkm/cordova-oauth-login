@@ -3,7 +3,7 @@ import LineSDK
 
 @objc(LineLogin) class Line : CDVPlugin {
     
-    func initialize(_ command: CDVInvokedUrlCommand) {
+    @objc(initialize:) func initialize(_ command: CDVInvokedUrlCommand) {
         
         let params = command.arguments[0] as AnyObject
         
@@ -44,15 +44,15 @@ import LineSDK
         }
     }
     
-    func loginWeb(_ command: CDVInvokedUrlCommand) {
+    @objc(loginWeb:) func loginWeb(_ command: CDVInvokedUrlCommand) {
         self._login(command, options: LoginManagerOptions.init(rawValue: LoginManagerOptions.onlyWebLogin.rawValue))
     }
     
-    func login(_ command: CDVInvokedUrlCommand) {
+    @objc(login:) func login(_ command: CDVInvokedUrlCommand) {
         self._login(command, options: LoginManagerOptions())
     }
     
-    func logout(_ command: CDVInvokedUrlCommand) {
+    @objc(logout:) func logout(_ command: CDVInvokedUrlCommand) {
         LoginManager.shared.logout { result in
             switch result {
             case .success:
@@ -66,7 +66,7 @@ import LineSDK
         }
     }
 
-    func getAccessToken(_ command: CDVInvokedUrlCommand) {
+    @objc(getAccessToken:) func getAccessToken(_ command: CDVInvokedUrlCommand) {
         
         guard let currentAccessToken = AccessTokenStore.shared.current else {
             let result = CDVPluginResult(status: CDVCommandStatus_ERROR)
@@ -79,7 +79,7 @@ import LineSDK
         commandDelegate.send(result, callbackId:command.callbackId)
     }
     
-    func verifyAccessToken(_ command: CDVInvokedUrlCommand) {
+    @objc(verifyAccessToken:) func verifyAccessToken(_ command: CDVInvokedUrlCommand) {
         
         API.verifyAccessToken { (result) in
             switch result {
@@ -93,7 +93,7 @@ import LineSDK
         }
     }
     
-    func refreshAccessToken(_ command: CDVInvokedUrlCommand) {
+    @objc(refreshAccessToken:) func refreshAccessToken(_ command: CDVInvokedUrlCommand) {
 
         API.refreshAccessToken { (result) in
             switch result {
