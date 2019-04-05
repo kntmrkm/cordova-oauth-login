@@ -1,96 +1,111 @@
 import Foundation
 import LineSDK
 
-@objc(LineLogin) class Line : CDVPlugin, LineSDKLoginDelegate {
+@objc(LineLogin) class Line : CDVPlugin {
     
-    var callbackId:String?
-    var apiClient:LineSDKAPI?
-
     func initialize(_ command: CDVInvokedUrlCommand) {
         
-        LineSDKLogin.sharedInstance().delegate = self
-        apiClient = LineSDKAPI(configuration: LineSDKConfiguration.defaultConfig())
+        let params = command.arguments[0] as AnyObject
         
+        guard let channelID = params["channel_id"] as? String else {
+            let result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: "Parameter Error")
+            self.commandDelegate.send(result, callbackId:command.callbackId)
+            return
+        }
+        
+        LoginManager.shared.setup(channelID: channelID, universalLinkURL: nil)
         let result = CDVPluginResult(status: CDVCommandStatus_OK)
         commandDelegate.send(result, callbackId:command.callbackId)
     }
     
+    func _login(_ command: CDVInvokedUrlCommand, options: LoginManagerOptions) {
+        LoginManager.shared.login(permissions: [.profile], in: self.viewController, options: options) {
+            result in
+            switch result {
+            case .success(let loginResult):
+                var data = ["userID":nil, "displayName":nil, "pictureURL":nil] as [String : Any?]
+                if let displayName = loginResult.userProfile?.displayName {
+                    data.updateValue(displayName, forKey: "displayName")
+                }
+                if let userID = loginResult.userProfile?.userID {
+                    data.updateValue(userID, forKey: "userID")
+                }
+                if let pictureURL = loginResult.userProfile?.pictureURL {
+                    data.updateValue(String(describing: pictureURL), forKey: "pictureURL")
+                }
+                
+                let result = CDVPluginResult(status: CDVCommandStatus_OK, messageAs:data as [AnyHashable : Any])
+                self.commandDelegate.send(result, callbackId:command.callbackId)
+            case .failure(let error):
+                let error = ["code":error.errorCode, "message": error.errorDescription as Any]
+                let result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: error)
+                self.commandDelegate.send(result, callbackId:command.callbackId)
+            }
+        }
+    }
+    
+    func loginWeb(_ command: CDVInvokedUrlCommand) {
+        self._login(command, options: LoginManagerOptions.init(rawValue: LoginManagerOptions.onlyWebLogin.rawValue))
+    }
+    
     func login(_ command: CDVInvokedUrlCommand) {
-        self.callbackId = command.callbackId
-        LineSDKLogin.sharedInstance().delegate = self
-        LineSDKLogin.sharedInstance().start()
+        self._login(command, options: LoginManagerOptions())
     }
     
     func logout(_ command: CDVInvokedUrlCommand) {
-        let dispatchQueue = DispatchQueue(label: "logout")
-        apiClient?.logout(queue: dispatchQueue, completion: { (success, error) in
-            if success {
+        LoginManager.shared.logout { result in
+            switch result {
+            case .success:
                 let result = CDVPluginResult(status: CDVCommandStatus_OK)
                 self.commandDelegate.send(result, callbackId:command.callbackId)
-            } else {
-                let result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: error.debugDescription)
+            case .failure(let error):
+                let error = ["code":error.errorCode, "message": error.errorDescription as Any]
+                let result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: error)
                 self.commandDelegate.send(result, callbackId:command.callbackId)
             }
-        })
+        }
     }
-    
+
     func getAccessToken(_ command: CDVInvokedUrlCommand) {
-        let accessToken = apiClient?.currentAccessToken()?.accessToken
-        if accessToken != nil {
-            let result = CDVPluginResult(status: CDVCommandStatus_OK, messageAs:accessToken)
-            commandDelegate.send(result, callbackId: command.callbackId)
-        } else {
+        
+        guard let currentAccessToken = AccessTokenStore.shared.current else {
             let result = CDVPluginResult(status: CDVCommandStatus_ERROR)
             commandDelegate.send(result, callbackId:command.callbackId)
+            return
         }
+        
+        let data = ["accessToken":currentAccessToken.value, "expireTime":currentAccessToken.expiresAt.timeIntervalSince1970] as [String : Any?]
+        let result = CDVPluginResult(status: CDVCommandStatus_OK, messageAs:data as [AnyHashable : Any])
+        commandDelegate.send(result, callbackId:command.callbackId)
     }
     
     func verifyAccessToken(_ command: CDVInvokedUrlCommand) {
-        let dispatchQueue = DispatchQueue(label: "verifyToken")
-        apiClient?.verifyToken(queue: dispatchQueue, completion: { (success, error) in
-            if (error != nil) {
-                let result = CDVPluginResult(status: CDVCommandStatus_ERROR)
-                self.commandDelegate.send(result, callbackId:command.callbackId)
-            } else {
+        
+        API.verifyAccessToken { (result) in
+            switch result {
+            case .success( _):
                 let result = CDVPluginResult(status: CDVCommandStatus_OK)
                 self.commandDelegate.send(result, callbackId:command.callbackId)
+            case .failure( _):
+                let result = CDVPluginResult(status: CDVCommandStatus_ERROR)
+                self.commandDelegate.send(result, callbackId:command.callbackId)
             }
-        })
+        }
     }
     
     func refreshAccessToken(_ command: CDVInvokedUrlCommand) {
-        apiClient?.refreshToken(with: apiClient?.currentAccessToken(), completion: { (success, error) in
-            if (error != nil) {
+
+        API.refreshAccessToken { (result) in
+            switch result {
+            case .success(let accessToken):
+                let data = ["accessToken":accessToken.value, "expireTime":accessToken.expiresAt.timeIntervalSince1970] as [String : Any?]
+                let result = CDVPluginResult(status: CDVCommandStatus_OK, messageAs:data as [AnyHashable : Any])
+                self.commandDelegate.send(result, callbackId:command.callbackId)
+            case .failure( _):
                 let result = CDVPluginResult(status: CDVCommandStatus_ERROR)
                 self.commandDelegate.send(result, callbackId:command.callbackId)
-            } else {
-                let result = CDVPluginResult(status: CDVCommandStatus_OK, messageAs:success?.accessToken)
-                self.commandDelegate.send(result, callbackId: command.callbackId)
             }
-        })
-    }
-    
-    func didLogin(_ login: LineSDKLogin, credential: LineSDKCredential?, profile: LineSDKProfile?, error: Error?) {
-        if error != nil {
-            let result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: error.debugDescription)
-            commandDelegate.send(result, callbackId:self.callbackId)
-        } else {
-            guard let profile = profile, let credential = credential, let accessToken = credential.accessToken else {
-                let result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: "Invalid Repsonse")
-                commandDelegate.send(result, callbackId:self.callbackId)
-                return
-            }
-            
-            var data = ["userID" : profile.userID,
-                        "displayName" : profile.displayName,
-                        "accessToken" : accessToken.accessToken]
-            
-            if let pictureURL = profile.pictureURL {
-                data["pictureURL"] = pictureURL.absoluteString
-            }
-            
-            let result = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: data)
-            commandDelegate.send(result, callbackId:self.callbackId)
         }
     }
+    
 }

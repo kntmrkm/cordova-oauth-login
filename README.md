@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2019.04.05
+
+- LINE SDK 5.0
+
 ## 2019.01.10
 
 - LINE SDK

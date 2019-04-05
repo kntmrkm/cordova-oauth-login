@@ -7,7 +7,8 @@
 
 #import "AppDelegate+OauthLogin.h"
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
-#import <LineSDK/LineSDK.h>
+#import <objc/runtime.h>
+@import LineSDKObjC;
 
 @implementation AppDelegate (FacebookConnectPlugin)
 
@@ -22,7 +23,7 @@ options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
                         ];
         return handled;
     } else {
-        return [[LineSDKLogin sharedInstance] handleOpenURL:url];
+        return [[LineSDKLoginManager sharedInstance] handleOpenURL:url];
     }
 }
 @end

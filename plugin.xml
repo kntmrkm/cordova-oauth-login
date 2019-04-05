@@ -14,7 +14,6 @@
 
   <preference name="FB_APP_ID" />
   <preference name="FB_APP_NAME" />
-  <preference name="LINE_CHANNEL_ID" />
   <preference name="PRODUCT_BUNDLE_IDENTIFIER" />
 
   <!-- android -->
@@ -134,17 +133,9 @@
       </dict>
     </config-file>
 
-    <config-file target="*-Info.plist" parent="LineSDKConfig">
-      <dict>
-        <key>ChannelID</key>
-        <string>$LINE_CHANNEL_ID</string>
-      </dict>
-    </config-file>
-
     <config-file target="*-Info.plist" parent="LSApplicationQueriesSchemes">
       <array>
-        <string>lineauth</string>
-        <string>line3rdp.$PRODUCT_BUNDLE_IDENTIFIER</string>
+        <string>lineauth2</string>
       </array>
       <array>
         <string>fbapi</string>
@@ -156,9 +147,21 @@
 
     <header-file src="src/ios/AppDelegate+OauthLogin.h" />
     <source-file src="src/ios/AppDelegate+OauthLogin.m" />
+    
+    <!-- Facebook -->
     <header-file src="src/ios/FacebookConnectPlugin.h" />
     <source-file src="src/ios/FacebookConnectPlugin.m" />
+
+    <!-- LINE -->
+    <dependency id="cordova-plugin-add-swift-support" version="1.7.2"/>
+    <dependency id="cordova-plugin-carthage-support" url="https://github.com/nrikiji/cordova-plugin-carthage-support"/>
     <source-file src="src/ios/LineLogin.swift" />
+    <header-file src="src/ios/LineSDK-Bridging-Header.h" />
+    <carthage>
+      <cartfile>github "line/line-sdk-ios-swift" ~> 5.0</cartfile>
+      <framework src="LineSDK.framework"/>
+      <framework src="LineSDKObjC.framework"/>
+    </carthage>
 
     <!-- Bolts framework -->
     <framework src="src/ios/Bolts.framework" custom="true" />
@@ -172,10 +175,7 @@
     <framework src="src/ios/FBSDKPlacesKit.framework" custom="true" />
     <framework src="src/ios/FBSDKShareKit.framework" custom="true" />
 
-    <framework src="src/ios/LineSDK.framework" custom="true" />
-    <framework src="Security.framework" />
-    <framework src="CoreTelephony.framework" />
-
-    <dependency id="cordova-plugin-add-swift-support" version="1.7.2"/>
+    <!-- LINE framework -->
+    <!-- <framework src="src/ios/LineSDK.framework" custom="true" /> -->
   </platform>
 </plugin>
