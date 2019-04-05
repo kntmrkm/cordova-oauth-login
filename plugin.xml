@@ -136,8 +136,6 @@
     <config-file target="*-Info.plist" parent="LSApplicationQueriesSchemes">
       <array>
         <string>lineauth2</string>
-      </array>
-      <array>
         <string>fbapi</string>
         <string>fb-messenger-api</string>
         <string>fbauth2</string>

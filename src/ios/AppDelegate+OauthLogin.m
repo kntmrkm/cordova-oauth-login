@@ -12,11 +12,12 @@
 
 @implementation AppDelegate (FacebookConnectPlugin)
 
-- (BOOL)application:(UIApplication *)application
+- (BOOL)application:(UIApplication *)app
 openURL:(NSURL *)url
 options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+    NSLog(@"FB handle url: %@", url);
     if ([url.absoluteString hasPrefix:@"fb"]) {
-        BOOL handled = [[FBSDKApplicationDelegate sharedInstance] application:application
+        BOOL handled = [[FBSDKApplicationDelegate sharedInstance] application:app
             openURL:url
             sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
             annotation:options[UIApplicationOpenURLOptionsAnnotationKey]
@@ -26,4 +27,39 @@ options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
         return [[LineSDKLoginManager sharedManager] application:app open:url options:options];
     }
 }
+@end
+
+@implementation AppDelegate (LineLogin)
+
+-(BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+    NSLog(@"LINE handle url: %@", url);
+    return [[LineSDKLoginManager sharedManager] application:app open:url options:options];
+}
+
+static void swizzleMethod(Class class, SEL destinationSelector, SEL sourceSelector);
+
++(void)load {
+    swizzleMethod([AppDelegate class], @selector(application:openURL:options:), @selector(line_application_options:openURL:options:));
+}
+
+- (BOOL)line_application_options: (UIApplication *)app openURL: (NSURL *)url options: (NSDictionary *)options {
+    NSRange range = [url.absoluteString rangeOfString:@"line3rdp"];
+    if (range.location != NSNotFound) {
+        return [[LineSDKLoginManager sharedManager] application:app open:url options:options];
+    } else {
+        return [self line_application_options:app openURL:url options:options];
+    }
+}
+
+static void swizzleMethod(Class class, SEL destinationSelector, SEL sourceSelector) {
+    Method destinationMethod = class_getInstanceMethod(class, destinationSelector);
+    Method sourceMethod = class_getInstanceMethod(class, sourceSelector);
+    
+    if (class_addMethod(class, destinationSelector, method_getImplementation(sourceMethod), method_getTypeEncoding(sourceMethod))) {
+        class_replaceMethod(class, destinationSelector, method_getImplementation(destinationMethod), method_getTypeEncoding(destinationMethod));
+    } else {
+        method_exchangeImplementations(destinationMethod, sourceMethod);
+    }
+}
+
 @end
