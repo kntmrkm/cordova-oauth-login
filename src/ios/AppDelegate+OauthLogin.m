@@ -23,7 +23,7 @@ options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
                         ];
         return handled;
     } else {
-        return [[LineSDKLoginManager sharedInstance] handleOpenURL:url];
+        return [[LineSDKLoginManager sharedManager] application:app open:url options:options];
     }
 }
 @end
