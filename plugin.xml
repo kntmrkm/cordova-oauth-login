@@ -14,10 +14,23 @@
 
   <preference name="FB_APP_ID" />
   <preference name="FB_APP_NAME" />
+  <preference name="FACEBOOK_HYBRID_APP_EVENTS" default="false" />
+  <preference name="FACEBOOK_ANDROID_SDK_VERSION" default="4.40.0"/>
   <preference name="PRODUCT_BUNDLE_IDENTIFIER" />
+
+  <engines>
+    <!-- Requires > 3.5.0 because of the custom Framework tag for iOS [CB-6698] -->
+    <!-- Requires > 4.0.0 because of the Framework tag for Android that uses gradle -->
+    <engine name="cordova-android" version=">=3.5.0" />
+    <engine name="cordova-ios" version=">=3.5.0" />
+  </engines>
 
   <!-- android -->
   <platform name="android">
+    <js-module src="www/facebook-native.js" name="FacebookConnectPlugin">
+      <clobbers target="facebookConnectPlugin" />
+    </js-module>
+
     <config-file target="res/xml/config.xml" parent="/*">
       <feature name="FacebookConnectPlugin">
         <param name="android-package" value="org.apache.cordova.facebook.ConnectPlugin" />
@@ -39,13 +52,16 @@
     <config-file target="res/values/facebookconnect.xml" parent="/*">
       <string name="fb_app_id">$FB_APP_ID</string>
       <string name="fb_app_name">$FB_APP_NAME</string>
+      <bool name="fb_hybrid_app_events">$FACEBOOK_HYBRID_APP_EVENTS</bool>
     </config-file>
     <!-- Used for cordova-android 7 -->
     <config-file target="app/src/main/res/values/facebookconnect.xml" parent="/*">
       <string name="fb_app_id">$FB_APP_ID</string>
       <string name="fb_app_name">$FB_APP_NAME</string>
+      <bool name="fb_hybrid_app_events">$FACEBOOK_HYBRID_APP_EVENTS</bool>
     </config-file>
 
+    <!-- Facebook -->
     <config-file target="AndroidManifest.xml" parent="application">
       <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/fb_app_id"/>
       <meta-data android:name="com.facebook.sdk.ApplicationName" android:value="@string/fb_app_name" />
@@ -53,13 +69,15 @@
         android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
         android:label="@string/fb_app_name" />
     </config-file>
+    <!-- LINE -->
     <config-file target="AndroidManifest.xml" parent="/*">
       <uses-permission android:name="android.permission.INTERNET" />
     </config-file>
 
-    <framework src="com.facebook.android:facebook-android-sdk:4.+"/>
+    <framework src="com.facebook.android:facebook-android-sdk:$FACEBOOK_ANDROID_SDK_VERSION"/>
     <framework src="src/android/line.gradle" custom="true" type="gradleReference" />
     <lib-file src="src/android/line-sdk-4.0.10.aar" />
+
     <!-- cordova plugin src files -->
     <source-file src="src/android/ConnectPlugin.java" target-dir="src/org/apache/cordova/facebook" />
     <source-file src="src/android/LineLogin.java" target-dir="src/plugin/line" />
@@ -67,6 +85,10 @@
 
   <!-- ios -->
   <platform name="ios">
+    <js-module src="www/facebook-native.js" name="FacebookConnectPlugin">
+      <clobbers target="facebookConnectPlugin" />
+    </js-module>
+    
     <config-file target="config.xml" parent="/*">
       <feature name="FacebookConnectPlugin">
         <param name="ios-package" value="FacebookConnectPlugin"/>
@@ -165,15 +187,14 @@
     <framework src="src/ios/Bolts.framework" custom="true" />
 
     <!-- Facebook framework -->
-    <framework src="src/ios/AccountKit.framework" custom="true" />
-    <framework src="src/ios/FBNotifications.framework" custom="true" />
     <framework src="src/ios/FBSDKCoreKit.framework" custom="true" />
     <framework src="src/ios/FBSDKLoginKit.framework" custom="true" />
-    <framework src="src/ios/FBSDKMessengerShareKit.framework" custom="true" />
-    <framework src="src/ios/FBSDKPlacesKit.framework" custom="true" />
     <framework src="src/ios/FBSDKShareKit.framework" custom="true" />
 
     <!-- LINE framework -->
     <!-- <framework src="src/ios/LineSDK.framework" custom="true" /> -->
   </platform>
+
+  <!-- after_prepare hook to populate APP_ID -->
+  <hook type="after_prepare" src="scripts/after_prepare.js" />
 </plugin>
