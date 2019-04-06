@@ -12,11 +12,11 @@ var getPreferenceValue = function(config, name) {
     }
 }
 
-if(process.argv.join("|").indexOf("APP_ID=") > -1) {
-	var APP_ID = process.argv.join("|").match(/APP_ID=(.*?)(\||$)/)[1]
+if(process.argv.join("|").indexOf("FB_APP_ID=") > -1) {
+	var FB_APP_ID = process.argv.join("|").match(/FB_APP_ID=(.*?)(\||$)/)[1]
 } else {
 	var config = fs.readFileSync("config.xml").toString()
-	var APP_ID = getPreferenceValue(config, "APP_ID")
+	var FB_APP_ID = getPreferenceValue(config, "FB_APP_ID")
 }
 
 var files = [
@@ -29,6 +29,6 @@ var files = [
 for(var i in files) {
     try {
     	var contents = fs.readFileSync(files[i]).toString()
-	    fs.writeFileSync(files[i], contents.replace(/APP_ID/g, APP_ID))
+	    fs.writeFileSync(files[i], contents.replace(/APP_ID/g, FB_APP_ID))
 	} catch(err) {}
 }

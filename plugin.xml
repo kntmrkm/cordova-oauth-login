@@ -196,5 +196,5 @@
   </platform>
 
   <!-- after_prepare hook to populate APP_ID -->
-  <hook type="after_prepare" src="scripts/after_prepare.js" />
+  <!-- <hook type="after_prepare" src="scripts/after_prepare.js" /> -->
 </plugin>
