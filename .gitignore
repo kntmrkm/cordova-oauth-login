@@ -34,3 +34,4 @@ proguard/
 nbproject
 
 node_modules/
+Carthage/
