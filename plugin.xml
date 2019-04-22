@@ -177,13 +177,11 @@
     <!-- <dependency id="cordova-plugin-carthage-support" url="https://github.com/kntmrkm/cordova-plugin-carthage-support"/> -->
     <source-file src="src/ios/LineLogin.swift" />
     <header-file src="src/ios/LineSDK-Bridging-Header.h" />
-    <!--
     <carthage>
       <cartfile>github "line/line-sdk-ios-swift" ~> 5.0</cartfile>
       <framework src="LineSDK.framework"/>
       <framework src="LineSDKObjC.framework"/>
     </carthage>
-    -->
     <!-- Bolts framework -->
     <framework src="src/ios/Bolts.framework" custom="true" />
 
