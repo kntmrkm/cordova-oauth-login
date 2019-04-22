@@ -176,7 +176,7 @@
     <dependency id="cordova-plugin-add-swift-support" version="2.0.2"/>
     <!-- <dependency id="cordova-plugin-carthage-support" url="https://github.com/kntmrkm/cordova-plugin-carthage-support"/> -->
     <source-file src="src/ios/LineLogin.swift" />
-    <!-- <header-file src="src/ios/LineSDK-Bridging-Header.h" /> -->
+    <header-file src="src/ios/LineSDK-Bridging-Header.h" />
     <!--
     <carthage>
       <cartfile>github "line/line-sdk-ios-swift" ~> 5.0</cartfile>
