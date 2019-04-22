@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 2019.04.22
+
+### carthage
+
+- `carthage update --platform iOS`
+- https://hopita.hatenablog.com/entry/2018/08/12/102018
+- `RunScript`のhookを追加した
+
 ## 2019.04.05
 
 - LINE SDK 5.0
