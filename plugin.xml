@@ -191,8 +191,8 @@
     <framework src="src/ios/FBSDKShareKit.framework" custom="true" />
 
     <!-- LINE framework -->
-    <!-- <framework src="src/ios/LineSDK.framework" custom="true" />
-    <framework src="src/ios/LineSDKObjC.framework" custom="true" /> -->
+    <!-- <framework src="src/ios/LineSDK.framework" custom="true" /> -->
+    <!-- <framework src="src/ios/LineSDKObjC.framework" custom="true" /> -->
   </platform>
 
   <!-- after_prepare hook to populate APP_ID -->
