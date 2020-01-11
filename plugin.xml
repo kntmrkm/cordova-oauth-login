@@ -121,7 +121,7 @@
           <key>CFBundleURLSchemes</key>
           <array>
             <string>fb$FB_APP_ID</string>
-            <string>line3rdp.$PRODUCT_BUNDLE_IDENTIFIER</string>
+            <string>line3rdp.$(PRODUCT_BUNDLE_IDENTIFIER)</string>
           </array>
           <key>CFBundleTypeRole</key>
           <string>Editor</string>
