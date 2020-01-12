@@ -204,7 +204,5 @@
     <!-- <framework src="src/ios/LineSDKObjC.framework" custom="true" /> -->
   </platform>
 
-  <!-- after_prepare hook to populate APP_ID -->
-  <!-- <hook type="after_prepare" src="scripts/after_prepare.js" /> -->
-  <hook type="after_prepare" src="scripts/modify_pbxproj.js"/>
+  <hook type="after_prepare" src="scripts/after_prepare.js"/>
 </plugin>
