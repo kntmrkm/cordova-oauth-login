@@ -6,28 +6,8 @@
 //
 
 #import "AppDelegate+OauthLogin.h"
-#import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <objc/runtime.h>
 @import LineSDKObjC;
-
-@implementation AppDelegate (FacebookConnectPlugin)
-
-- (BOOL)application:(UIApplication *)app
-openURL:(NSURL *)url
-options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
-    NSLog(@"FB handle url: %@", url);
-    if ([url.absoluteString hasPrefix:@"fb"]) {
-        BOOL handled = [[FBSDKApplicationDelegate sharedInstance] application:app
-            openURL:url
-            sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
-            annotation:options[UIApplicationOpenURLOptionsAnnotationKey]
-                        ];
-        return handled;
-    } else {
-        return false;
-    }
-}
-@end
 
 @implementation AppDelegate (LineLogin)
 
